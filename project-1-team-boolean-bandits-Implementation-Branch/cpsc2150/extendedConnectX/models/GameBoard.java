@@ -1,7 +1,7 @@
 package cpsc2150.extendedConnectX.models;
 
 /*@authors Breanna Mackey BreannaMackey, Trent Brown Trentbrown1, Gabriel Hillesheim ghilles23
- * @version 1.0
+ * @version 1.0  
  * Constructs a GameBoard Object that is to be built upon through various methods.
  */
 
@@ -28,7 +28,7 @@ public class GameBoard extends AbsGameBoard
         numToWin = 5;
         return numToWin; 
     }
-    /*
+    /* GameBoard Constructor Contracts and JavaDocs
      *Constructs a GameBoard object
      * @pre none
      * @post [self is initialized to a 20 char array with all the values set to ' ']
@@ -46,7 +46,7 @@ public class GameBoard extends AbsGameBoard
 
     }
 
-    /*
+    /* dropToken Contracts and JavaDocs
      * Drops a token in a selected column
      *
      * @param p [player that is currently playing represented by a character]
@@ -72,7 +72,7 @@ public class GameBoard extends AbsGameBoard
         }
      }
 
-    /*
+    /* WhatsAtPos Contracts and JavaDocs
      * Checks if there is 5 in a vertical line win
      *
      * @param pos [position of token based on BoardPosition]

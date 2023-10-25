@@ -8,6 +8,7 @@ Gabriel Hillesheim ghilles23 | Trent Brown trentbrown1 | Breanna Mackey BreannaM
     /**
     * @invariant 
     * 0 <= Row <= GameBoard.MAX_ROW AND 0 <= Column <= GameBoard.MAX_COL
+    * 
     */
 
 public class BoardPosition

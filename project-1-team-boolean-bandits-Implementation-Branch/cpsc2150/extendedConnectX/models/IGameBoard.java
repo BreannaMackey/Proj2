@@ -9,7 +9,7 @@ public interface IGameBoard{
     public char whatsAtPos(BoardPosition pos);
     //Secondary methods
     
-        /*
+        /* checkIfFree Contracts and JavaDocs
      * Checks if column has available space to accept another token
      *
      * @param [Check if there is availible space for c column]
@@ -33,24 +33,11 @@ public interface IGameBoard{
             
         }
         
-        
-    
-        
-      /* if (gameBoard[0][c] == ' '){
-                //check if top most row has a blank space
-                return true;
-            }
-            else{
-                return false;
-            }
-        }
- */
-       
  
  
     //DEVCOM: if current column is less than MAX_COL return true else false
     
-    /*
+    /* checkForWin Contracts and JavaDocs
     *Checks if the player won after placing token
     *
     * @param c [column position that will be checked for a player win as int type]
@@ -66,21 +53,18 @@ public interface IGameBoard{
         If so it will return true, otherwise false. Note: this is not checking the entire board for a win, it is just
         checking if the last token placed results in a win. You may call other methods to complete this method */
 
-      BoardPosition latest = new BoardPosition(getNumRows() - 1, c); //we can also use zero
-        char lastP = whatsAtPos(latest);
-
-        if(checkHorizWin(latest, lastP) || checkVertWin(latest, lastP) || checkDiagWin(latest, lastP)){
-            System.out.println("Checkforwin used");
-            return true;
+        for(int i = 0; i < getNumColumns(); i++){
+            BoardPosition newpos = new BoardPosition(i, c);
+            if(whatsAtPos(newpos) != ' '){
+                if(checkHorizWin(newpos, whatsAtPos(newpos)) ||checkVertWin(newpos, whatsAtPos(newpos)) || checkDiagWin(newpos, whatsAtPos(newpos))){
+                    return true; //Return true if any win condition is met
+                }
+            }
+        }return false;
         }
-        else{
-            return false;
-        }  
+    
 
-
-    }
-
-    /*
+    /* checkTie Contracts and JavaDocs
     *Checks for a tie between players
     * @param None
     * @pre None
@@ -103,77 +87,64 @@ public interface IGameBoard{
     }
 
         
-    
+    /* checkHorizWin Contracts and JavaDocs
+    * Checks if there is 5 in a horizontal line win
+    *
+    * @param pos [position of token based on BoardPosition]
+    * @param p [player as character type]
+    * @pre p =! ' '
+    *
+    * @post checkHorizWin = [if last token placed makes 5 in a row horizontally return true, otherwise return false] AND self = #self
+    *
+    * @return [returns true if there is a horizontal win otherwise returns false]
+    *
+    *
+    */
 
     public default boolean checkHorizWin(BoardPosition pos, char p)
     {
         /*checks to see if the last token placed (which was placed in position pos by player p) resulted in 5 in
         a row horizontally. Returns true if it does, otherwise false*/
+
+        //check left and right for tokens 
+        //middle placement needs accounted for
+        
         int row = pos.getRow();
         int column = pos.getColumn();
         int numToWin = getNumToWin();
-        int counter = 0;
-
-            for(int i = -numToWin + 1; i < numToWin; i++){
-                int colCheckR = column + i;
-                if(colCheckR >= 0 && colCheckR <= getNumColumns() && whatsAtPos(new BoardPosition(row, colCheckR)) == p ){
-                    counter += 1;
-                    
-                }
-                else{
-                    counter = 0;
-                }
-                /* if(counter >= numToWin){
-                     System.out.println("Checkhorizwin used");
-                     return true;
-                 } */
-            }
-            for(int j = -numToWin + 1; j < numToWin; j++){
-                int colCheckL = column - j;
-                if(colCheckL >= 0 && colCheckL <= getNumColumns() && whatsAtPos(new BoardPosition(row, colCheckL)) == p ){
-                    counter += 1;
-                }
-                else{
-                    counter = 0;
-                }
-                 /* if(counter >= numToWin){
-                     System.out.println("Checkhorizwin used");
-                    return true;
-                 } */
-            }
-            if(counter >= numToWin){
-                    System.out.println("Checkhorizwin used");
+        int Lcount = 0; // Left counter set to 0
+        for(int i = 0; i < numToWin; i++){ //check same token left
+            int LCol = column - i;
+            if(LCol >= 0 && whatsAtPos(new BoardPosition(row, LCol)) == p){//ensure boundary
+                Lcount++; // count to be added to compare with numToWin
+                if(Lcount == numToWin){ //If enough return true
                     return true;
                 }
-               /* if(counter == numToWin - 1){
+            }
+            else{
+                break;
+            }
+            }
+       
+        int Rcount = 0; //Right counter set to zero
+        for(int i = 0; i < numToWin; i++){ //check for same token right
+                int RCol = column + i;
+                if(RCol < getNumColumns() && whatsAtPos(new BoardPosition(row, RCol)) == p){
+                    Rcount++; //count to be added to compare with numToWin
+                if(Rcount == numToWin){ //If enough return true
                     return true;
                 }
-                else{
-                    return false;
-                }
-                 */
-                
-                return false;
-            }
-
-
-            
-        /*for (row = 0; row < getNumRows() - 2; row++){
-            for(column = 0; column < getNumColumns() -2; column++){
-               if(row == p && column == p && column + 1 == p && column +2 == p && column + 3 == p){
-                   return true;
-               }
-               
-               else{
-                    return false;
+            } 
+            else{
+                    break;
                 }
             }
-        }
-        */
-        
+            return false;
+    }
+
+
     
-
-    /*
+    /* checkVertWin Contracts and JavaDocs
      *Checks if there is 5 in a vertical line win
      *
      * @param pos [position of token based on BoardPosition]
@@ -191,46 +162,30 @@ public interface IGameBoard{
         int row = pos.getRow();
         int column = pos.getColumn();
         int numToWin = getNumToWin();
-        int counter = 0;
+        int count = 0;
 
-            for(int i = 0; i <= numToWin; i++){ //For loop for iterating down the column
-                int rowCheckD = row + i;
-                if(rowCheckD >= 0 && rowCheckD <= getNumRows() && whatsAtPos(new BoardPosition(rowCheckD, column)) == p){ //check to make sure player is X or O
-                    counter ++;
-                    //raise the number for how many are in a row
-                }
-                else{
-                    break;
-                }
-            }
-
-                if(counter == numToWin - 1){
-                    System.out.println("Checkvertwin used");
-                    return true;
-                }
-                else{
-                    return false;
-                }
-                }
-
-      /*  for (row = 0; row < getNumRows() - 4; row++){
-            for(column = 0; column < getNumColumns(); column++){
-                if (row == p && row + 1 == p && row + 2 == p && row + 3 == p && column == p){
-                    return true;
-                }
-              
-                else{
-                    return false;
-                }
-
-            }
-        }*/
-
+                //only need to check down for vert
+                    for(int i = 0; i < getNumRows(); i++){ // iterate down the column
+                        if(whatsAtPos(new BoardPosition(i, column)) == p){
+                            count++;
+                           if(count == numToWin){
+                            return true;
+                           }
+                        }
+                        else{
+                            count = 0;
+                        }
+                    }
+        
+                 return false;
+            
+        }
+        
         
 
 
     
-        /*
+        /* checkDiagWin Contracts and JavaDocs
      * Checks if there is 5 in a diagonal line win
      *
      * @param pos position of token based on BoardPosition
@@ -244,7 +199,8 @@ public interface IGameBoard{
     public default boolean checkDiagWin(BoardPosition pos, char p)
     {
         int numToWin = getNumToWin();
-
+        int row = pos.getRow();
+        int col = pos.getColumn();
             int[][] directions = {
                 {1, 1},  // bottom-right
                 {1, -1}, // bottom-left
@@ -253,8 +209,6 @@ public interface IGameBoard{
             };
         
             for (int[] dir : directions) {
-                int row = pos.getRow();
-                int col = pos.getColumn();
                 int counter = 1;
                 
             
@@ -274,7 +228,6 @@ public interface IGameBoard{
                 }
                 
                 if (counter == numToWin) {
-                    System.out.println("CheckDiagwin used");
                     return true; 
                 }
             }
@@ -283,7 +236,7 @@ public interface IGameBoard{
                 
     }
 
-        /** 
+        /* isPlayerAtPos Contracts and JavaDocs
     * @param pos [an object of board position]
     * @param player [The character that the player has chosen]
     * 
