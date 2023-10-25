@@ -47,6 +47,11 @@ public class GameScreen {
                 if (chosenCol >= 0 && chosenCol < gameBoard.getNumColumns()) {
                     if (gameBoard.checkIfFree(chosenCol)) {
                         gameBoard.dropToken(currentPlayer, chosenCol);
+                        BoardPosition lastP = new BoardPosition(gameBoard.getNumRows() -1, chosenCol);
+                    if(gameBoard.checkHorizWin(lastP, currentPlayer)){
+                          System.out.println("Player " + currentPlayer + " Wins!");
+                           break;
+                       }
 
                         // Switch to the other player
                         currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
@@ -57,6 +62,7 @@ public class GameScreen {
                     System.out.println("Invalid column choice. Please choose a valid column.");
                 }
                 
+               
             }
         }
 

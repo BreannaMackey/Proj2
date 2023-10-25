@@ -70,6 +70,7 @@ public interface IGameBoard{
         char lastP = whatsAtPos(latest);
 
         if(checkHorizWin(latest, lastP) || checkVertWin(latest, lastP) || checkDiagWin(latest, lastP)){
+            System.out.println("Checkforwin used");
             return true;
         }
         else{
@@ -115,29 +116,35 @@ public interface IGameBoard{
 
             for(int i = -numToWin + 1; i < numToWin; i++){
                 int colCheckR = column + i;
-                if(colCheckR >= 0 && colCheckR <= getNumColumns() && whatsAtPos(new BoardPosition(row, colCheckR)) == p){
-                    counter ++;
+                if(colCheckR >= 0 && colCheckR <= getNumColumns() && whatsAtPos(new BoardPosition(row, colCheckR)) == p ){
+                    counter += 1;
                     
                 }
                 else{
                     counter = 0;
                 }
-                if(counter >= numToWin){
-                    return true;
-                }
+                /* if(counter >= numToWin){
+                     System.out.println("Checkhorizwin used");
+                     return true;
+                 } */
             }
             for(int j = -numToWin + 1; j < numToWin; j++){
                 int colCheckL = column - j;
-                if(colCheckL >= 0 && colCheckL <= getNumColumns() && whatsAtPos(new BoardPosition(row, colCheckL)) == p){
-                    counter ++;
+                if(colCheckL >= 0 && colCheckL <= getNumColumns() && whatsAtPos(new BoardPosition(row, colCheckL)) == p ){
+                    counter += 1;
                 }
                 else{
                     counter = 0;
                 }
-                if(counter >= numToWin){
+                 /* if(counter >= numToWin){
+                     System.out.println("Checkhorizwin used");
+                    return true;
+                 } */
+            }
+            if(counter >= numToWin){
+                    System.out.println("Checkhorizwin used");
                     return true;
                 }
-            }
                /* if(counter == numToWin - 1){
                     return true;
                 }
@@ -198,6 +205,7 @@ public interface IGameBoard{
             }
 
                 if(counter == numToWin - 1){
+                    System.out.println("Checkvertwin used");
                     return true;
                 }
                 else{
@@ -266,6 +274,7 @@ public interface IGameBoard{
                 }
                 
                 if (counter == numToWin) {
+                    System.out.println("CheckDiagwin used");
                     return true; 
                 }
             }
