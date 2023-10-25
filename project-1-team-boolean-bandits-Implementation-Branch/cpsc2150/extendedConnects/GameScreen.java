@@ -17,7 +17,7 @@ public class GameScreen {
             char currentPlayer = 'X'; //set initial character/ player1 to X
             String userInput = "y";
     
-            while(userInput != "n"){
+            while(userInput.equals("y")){
                 
                
                 System.out.println(gameBoard); //print initial gameBoard
